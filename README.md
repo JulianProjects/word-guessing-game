@@ -43,16 +43,22 @@ The interface includes buttons to restart the game or close the application.
 ## Tech Stack
 
 ![Java](https://img.shields.io/badge/Java-ED8B00?logo=openjdk&logoColor=white)
+![Eclipse](https://img.shields.io/badge/Eclipse-2C2255?logo=eclipseide&logoColor=white)
 ![Git](https://img.shields.io/badge/Git-F05032?logo=git&logoColor=white)
 ![GitHub](https://img.shields.io/badge/GitHub-181717?logo=github&logoColor=white)
+![Stack Overflow](https://img.shields.io/badge/Stack%20Overflow-F58025?logo=stackoverflow&logoColor=white)
+![ChatGPT](https://img.shields.io/badge/ChatGPT-74AA9C?logo=openai&logoColor=white)
+![Markdown](https://img.shields.io/badge/Markdown-000000?logo=markdown&logoColor=white)
 
 | Technology | Purpose |
-|---|---|
+|------------|---------|
 | Java | Main programming language |
+| Eclipse | Development environment (IDE) |
 | Git | Version control |
 | GitHub | Repository hosting and documentation |
+| Stack Overflow | Research and problem solving |
+| ChatGPT | Development support and debugging |
 | Markdown | Project documentation |
-
 
 ## Software Bill of Materials
 
