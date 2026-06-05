@@ -24,7 +24,7 @@ The interface includes buttons to restart the game or close the application.
 
 ## Screenshot
 
-![Java Word Game Screenshot](docs/images/wordle-screenshot.png)
+![Java Word Game Screenshot](game_example.png)
 
 ## Features
 
