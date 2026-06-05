@@ -2,9 +2,9 @@
 > Status: Finished
 
 > Authors:
-> - Max Mustermann
-> - Anna Beispiel
-> - Tom Muster
+>  Julian Wappler
+>  Marek Scholze
+>  Lukas Kretschmar
 
 ## Game Overview
 
