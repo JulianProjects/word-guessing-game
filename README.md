@@ -1,6 +1,10 @@
 # Java Word Game
 > Status: Finished
-> Authors: Max Mustermann (@max), Anna Beispiel (@anna), Tom Muster (@tom)
+
+> Authors:
+> - Max Mustermann
+> - Anna Beispiel
+> - Tom Muster
 
 ## Game Overview
 
