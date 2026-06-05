@@ -4,7 +4,7 @@
 > Authors:
 >  Julian Wappler
 >  Marek Scholze
->  Lukas Kretschmar
+>  Lukas Rohne
 
 ## Game Overview
 
