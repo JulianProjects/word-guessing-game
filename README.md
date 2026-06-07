@@ -81,43 +81,18 @@ Check Java installation:
 java -version
 javac -version
 ```
-
-## Build, Run and Clean
-
-### macOS / Linux
-
-Compile the project:
-
-```bash
-mkdir -p out
-javac -d out src/*.java
-```
-
-Run the project:
-
-```bash
-java -cp out Main
-```
-
-Clean generated build files:
-
-```bash
-rm -rf out
-```
-
 ### Windows PowerShell
 
 Compile the project:
 
 ```powershell
-New-Item -ItemType Directory -Force -Path out
-javac -d out src\*.java
+javac -encoding UTF-8 -d bin -sourcepath src src/main/Main.java
 ```
 
 Run the project:
 
 ```powershell
-java -cp out Main
+java -cp bin main.Main
 ```
 
 Clean generated build files:
@@ -126,24 +101,5 @@ Clean generated build files:
 Remove-Item -Recurse -Force out
 ```
 
-### Windows Command Prompt
 
-Compile the project:
-
-```cmd
-if not exist out mkdir out
-javac -d out src\*.java
-```
-
-Run the project:
-
-```cmd
-java -cp out Main
-```
-
-Clean generated build files:
-
-```cmd
-rmdir /s /q out
-```
 
