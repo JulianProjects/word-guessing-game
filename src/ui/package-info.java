@@ -1,0 +1,1 @@
+package ui; /** Swing-UI-Komponenten (View-Schicht im MVP). */

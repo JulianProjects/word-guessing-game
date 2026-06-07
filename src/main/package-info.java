@@ -1,0 +1,1 @@
+package main; /** Einstiegspunkt (Main-Klasse mit main()). */

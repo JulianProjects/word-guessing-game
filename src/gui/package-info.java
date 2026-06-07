@@ -1,0 +1,1 @@
+package gui; /** Niedrigstufige GUI-Bausteine (Panels, Buttons, Tastatur). */
