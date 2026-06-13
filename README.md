@@ -60,6 +60,10 @@ The interface includes buttons to restart the game or close the application.
 | ChatGPT | Development support and debugging |
 | Markdown | Project documentation |
 
+## Code Style
+
+This project follows the [Google Java Style Guide](https://google.github.io/styleguide/javaguide.html) to ensure consistent formatting, naming conventions, imports, indentation, and code structure throughout the Java source files.
+
 ## Software Bill of Materials
 
 This project does not currently require a separate Software Bill of Materials because it does not use any external third-party libraries or additional `.jar` dependencies.
