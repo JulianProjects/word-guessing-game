@@ -1,1 +1,2 @@
-package main; /** Einstiegspunkt (Main-Klasse mit main()). */
+/** Contains the application's entry point. */
+package main;

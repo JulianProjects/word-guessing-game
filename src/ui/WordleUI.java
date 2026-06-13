@@ -1,89 +1,109 @@
-// File: src/gui/app/WordleUI.java
 package ui;
 
-import gui.bild.BildPanel;
 import gui.button.ButtonsBar;
-import gui.eingabefeld.SixRowWordInput;
-import ui.PhysischeTastatur;
-import logic.AppConfig;
-
-import javax.swing.*;
-import java.awt.*;
+import gui.image.ImagePanel;
+import gui.inputfield.SixRowWordInput;
+import java.awt.BorderLayout;
+import java.awt.CardLayout;
+import java.awt.KeyEventDispatcher;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.concurrent.atomic.AtomicReference;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import logic.AppConfig;
 
+/** Builds and displays the main Wordle user interface. */
 public class WordleUI {
 
-    private JFrame frame;
+  private JFrame frame;
 
-    public void show() {
-        // Frame
-        frame = new JFrame("Wordle");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setLayout(new BorderLayout());
+  public void show() {
+    // Configure the main application window.
+    frame = new JFrame("Wordle");
+    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    frame.setLayout(new BorderLayout());
 
-        // Header
-        frame.add(HeaderFactory.create("Wordle"), BorderLayout.NORTH);
+    frame.add(HeaderFactory.create("Wordle"), BorderLayout.NORTH);
 
-        // Center (Cards + wichtige Referenzen)
-        CenterCards.Refs refs = CenterCards.build();
-        JPanel centerPanel = refs.centerPanel;
-        BildPanel homeImage = refs.homeImage;
-        SixRowWordInput wordInput = refs.wordInput;
-        JLabel hint = refs.hint;
+    // Build the center cards and retrieve the required component references.
+    CenterCards.Refs references = CenterCards.build();
+    JPanel centerPanel = references.centerPanel;
+    ImagePanel homeImagePanel = references.homeImagePanel;
+    SixRowWordInput wordInput = references.wordInput;
+    JLabel hintLabel = references.hintLabel;
 
-        frame.add(centerPanel, BorderLayout.CENTER);
+    frame.add(centerPanel, BorderLayout.CENTER);
 
-        // Buttons (unten) – Navigation als Referenzen
-        AtomicReference<Runnable> showMainMenuRef = new AtomicReference<>();
-        AtomicReference<Runnable> showGameOnlyRef = new AtomicReference<>();
-        ButtonsBar buttons = ButtonsFactory.create(wordInput, showGameOnlyRef, showMainMenuRef);
-        frame.add(buttons.getComponent(), BorderLayout.SOUTH);
+    // References allow the button callbacks to be assigned after creation.
+    AtomicReference<Runnable> showMainMenuReference = new AtomicReference<>();
+    AtomicReference<Runnable> showGameOnlyReference = new AtomicReference<>();
 
-        CardLayout centerLayout = (CardLayout) centerPanel.getLayout();
+    ButtonsBar buttonsBar =
+        ButtonsFactory.create(
+            wordInput,
+            showGameOnlyReference,
+            showMainMenuReference);
 
-        // Navigation implementieren und Referenzen setzen
-        Runnable showMainMenu = () -> {
-            buttons.showMainButtons();
-            centerLayout.show(centerPanel, AppConfig.CARD_IMAGE);
-            homeImage.load(AppConfig.HOME_IMAGE);
-            hint.setText("<html>Errate das Wordle in 6 Versuchen.<br>" +
-                    "Jeder Versuch muss ein gültiges Wort mit 5 Buchstaben sein.<br>" +
-                    "Die Farbe der Kacheln ändert sich,<br>" +
-                    "um zu zeigen, wie nah dein Versuch am gesuchten Wort ist.</html>");
-            wordInput.reset();
+    frame.add(buttonsBar.getComponent(), BorderLayout.SOUTH);
+
+    CardLayout centerLayout = (CardLayout) centerPanel.getLayout();
+
+    // Configure navigation to the main menu.
+    Runnable showMainMenu =
+        () -> {
+          buttonsBar.showMainButtons();
+          centerLayout.show(centerPanel, AppConfig.CARD_IMAGE);
+          homeImagePanel.load(AppConfig.HOME_IMAGE);
+          hintLabel.setText(
+              "<html>Guess the Wordle in 6 attempts.<br>"
+                  + "Each attempt must be a valid 5-letter word.<br>"
+                  + "The color of the tiles changes<br>"
+                  + "to show how close your guess is to the target word.</html>");
+          wordInput.reset();
         };
-        Runnable showGameOnly = () -> {
-            buttons.showHomeButtonOnly(); // zeigt jetzt Home + Neustart
-            centerLayout.show(centerPanel, AppConfig.CARD_INPUT);
-            wordInput.reset();
-            hint.setText(" ");
-        };
-        showMainMenuRef.set(showMainMenu);
-        showGameOnlyRef.set(showGameOnly);
 
-        // Physische Tastatur
-        KeyEventDispatcher physKeyDispatcher = PhysischeTastatur.registrieren(wordInput);
-        frame.addWindowListener(new java.awt.event.WindowAdapter() {
-            @Override public void windowClosed(java.awt.event.WindowEvent e) {
-                PhysischeTastatur.deregistrieren(physKeyDispatcher);
-            }
+    // Configure navigation to the game view.
+    Runnable showGameOnly =
+        () -> {
+          buttonsBar.showHomeButtonOnly();
+          centerLayout.show(centerPanel, AppConfig.CARD_INPUT);
+          wordInput.reset();
+          hintLabel.setText(" ");
+        };
+
+    showMainMenuReference.set(showMainMenu);
+    showGameOnlyReference.set(showGameOnly);
+
+    // Register physical keyboard controls and remove them when the window closes.
+    KeyEventDispatcher physicalKeyboardDispatcher =
+        PhysicalKeyboard.register(wordInput);
+
+    frame.addWindowListener(
+        new WindowAdapter() {
+          @Override
+          public void windowClosed(WindowEvent event) {
+            PhysicalKeyboard.unregister(physicalKeyboardDispatcher);
+          }
         });
 
-        // Resize Reaktionen
-        frame.addComponentListener(new ComponentAdapter() {
-            @Override public void componentResized(ComponentEvent e) {
-                frame.revalidate();
-                frame.repaint();
-            }
+    // Refresh the layout whenever the window size changes.
+    frame.addComponentListener(
+        new ComponentAdapter() {
+          @Override
+          public void componentResized(ComponentEvent event) {
+            frame.revalidate();
+            frame.repaint();
+          }
         });
 
-        // Startzustand
-        showMainMenu.run();
+    // Display the application in its initial main-menu state.
+    showMainMenu.run();
 
-        // Anzeigen
-        frame.setExtendedState(frame.getExtendedState() | JFrame.MAXIMIZED_BOTH);
-        frame.setVisible(true);
-    }
+    frame.setExtendedState(frame.getExtendedState() | JFrame.MAXIMIZED_BOTH);
+    frame.setVisible(true);
+  }
 }

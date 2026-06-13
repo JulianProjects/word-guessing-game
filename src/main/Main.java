@@ -1,14 +1,15 @@
-// File: src/main/Main.java
 package main;
 
-import ui.LookAndFeelUtil;
 import mvp.WordlePresenter;
 import mvp.WordleSwingView;
+import ui.LookAndFeelUtil;
 
-
+/** Starts the Wordle application. */
 public class Main {
-    public static void main(String[] args) {
-        LookAndFeelUtil.applyPreferred();
-        new WordlePresenter(new WordleSwingView()).start();
-    }
+
+  public static void main(String[] args) {
+    // Configure the interface before creating the application's MVP components.
+    LookAndFeelUtil.applyPreferred();
+    new WordlePresenter(new WordleSwingView()).start();
+  }
 }

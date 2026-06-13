@@ -1,5 +1,8 @@
 package mvp;
 
+/** Defines the operations provided by a Wordle view. */
 public interface WordleView {
-    void show();
+
+  /** Displays the user interface. */
+  void show();
 }

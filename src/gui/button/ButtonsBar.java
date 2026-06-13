@@ -1,40 +1,60 @@
 package gui.button;
 
-import javax.swing.*;
+import gui.keyboard.ButtonsFactory;
+import java.awt.FlowLayout;
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import gui.tastatur.ButtonsFactory;
-
-import java.awt.*;
-
-/** Untere Button-Leiste (Play/Home/Neustart). */
+/** Displays the bottom button bar for playing, closing, and restarting the game. */
 public class ButtonsBar extends Buttons {
-    private final JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER, 12, 8));
-    private final JButton btnPlay, btnHome, btnRestart;
-    private final ButtonsVisibility visibility;
 
-    public ButtonsBar() {
-        panel.setBorder(new EmptyBorder(6, 0, 14, 0));
-        ButtonsFactory factory = new ButtonsFactory();
+  private final JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER, 12, 8));
+  private final JButton playButton;
+  private final JButton homeButton;
+  private final JButton restartButton;
+  private final ButtonsVisibility visibility;
 
-        btnPlay    = factory.create("Play",      this::onPlay);
-        btnHome    = factory.create("Spiel schließen", this::onHome);
-        btnRestart = factory.create("Neustart",  this::onRestart);
+  public ButtonsBar() {
+    panel.setBorder(new EmptyBorder(6, 0, 14, 0));
 
-        panel.add(btnPlay);
-        panel.add(btnHome);
-        panel.add(btnRestart);
+    ButtonsFactory factory = new ButtonsFactory();
 
-        visibility = new ButtonsVisibility(btnPlay, btnHome, btnRestart);
-        visibility.showMainButtons(); // Start im Hauptmenü
-    }
+    playButton = factory.create("Play", this::onPlay);
+    homeButton = factory.create("Close game", this::onHome);
+    restartButton = factory.create("Restart", this::onRestart);
 
-    @Override public JComponent getComponent() { return panel; }
+    panel.add(playButton);
+    panel.add(homeButton);
+    panel.add(restartButton);
 
-    public void showMainButtons()    { visibility.showMainButtons(); }
-    public void showHomeButtonOnly() { visibility.showHomeButtonOnly(); }
+    visibility = new ButtonsVisibility(playButton, homeButton, restartButton);
+    visibility.showMainButtons();
+  }
 
-    @Override public void onPlay() {}
-    @Override public void onHome() {}
-    @Override public void onRestart() {}
+  @Override
+  public JComponent getComponent() {
+    return panel;
+  }
+
+  public void showMainButtons() {
+    visibility.showMainButtons();
+  }
+
+  public void showHomeButtonOnly() {
+    visibility.showHomeButtonOnly();
+  }
+
+  @Override
+  public void onPlay() {
+  }
+
+  @Override
+  public void onHome() {
+  }
+
+  @Override
+  public void onRestart() {
+  }
 }

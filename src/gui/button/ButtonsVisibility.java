@@ -1,30 +1,44 @@
 package gui.button;
 
-import javax.swing.*;
+import javax.swing.JButton;
 
-/** Kapselt die Sichtbarkeit der Buttons. */
+/** Controls the visibility of the game buttons. */
 public class ButtonsVisibility extends Buttons {
-    private final JButton play, home, restart;
 
-    public ButtonsVisibility(JButton play, JButton home, JButton restart) {
-        this.play = play; this.home = home; this.restart = restart;
-    }
+  private final JButton playButton;
+  private final JButton homeButton;
+  private final JButton restartButton;
 
-    /** Sichtbarkeit für Hauptmenü. */
-    public void showMainButtons() {
-        play.setVisible(true);
-        home.setVisible(false);
-        restart.setVisible(false); // ← NEU
-    }
+  public ButtonsVisibility(
+      JButton playButton,
+      JButton homeButton,
+      JButton restartButton) {
+    this.playButton = playButton;
+    this.homeButton = homeButton;
+    this.restartButton = restartButton;
+  }
 
-    /** Sichtbarkeit fürs Spiel: Home + Neustart. */
-    public void showHomeButtonOnly() {
-        play.setVisible(false);
-        home.setVisible(true);
-        restart.setVisible(true); // ← NEU
-    }
+  public void showMainButtons() {
+    playButton.setVisible(true);
+    homeButton.setVisible(false);
+    restartButton.setVisible(false);
+  }
 
-    @Override public void onPlay() {}
-    @Override public void onHome() {}
-    @Override public void onRestart() {}
+  public void showHomeButtonOnly() {
+    playButton.setVisible(false);
+    homeButton.setVisible(true);
+    restartButton.setVisible(true);
+  }
+
+  @Override
+  public void onPlay() {
+  }
+
+  @Override
+  public void onHome() {
+  }
+
+  @Override
+  public void onRestart() {
+  }
 }

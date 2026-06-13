@@ -1,78 +1,100 @@
-// File: src/gui/app/CenterCards.java
 package ui;
 
-import gui.bild.BildPanel;
-import gui.eingabefeld.SixRowWordInput;
-import gui.tastatur.OnScreenTastatur;
+import gui.image.ImagePanel;
+import gui.inputfield.SixRowWordInput;
+import gui.keyboard.OnScreenKeyboard;
+import java.awt.BorderLayout;
+import java.awt.CardLayout;
+import java.awt.Component;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
 import logic.AppConfig;
 
-import javax.swing.*;
-import javax.swing.border.EmptyBorder;
-import java.awt.*;
-
+/** Builds the image and word-input cards displayed in the center area. */
 public final class CenterCards {
 
-    private CenterCards() {}
+  private CenterCards() {}
 
-    public static final class Refs {
-        public final JPanel centerPanel;
-        public final BildPanel homeImage;
-        public final SixRowWordInput wordInput;
-        public final JLabel hint;
+  /** Provides references to the components required by the main interface. */
+  public static final class Refs {
 
-        private Refs(JPanel centerPanel, BildPanel homeImage, SixRowWordInput wordInput, JLabel hint) {
-            this.centerPanel = centerPanel;
-            this.homeImage = homeImage;
-            this.wordInput = wordInput;
-            this.hint = hint;
-        }
+    public final JPanel centerPanel;
+    public final ImagePanel homeImagePanel;
+    public final SixRowWordInput wordInput;
+    public final JLabel hintLabel;
+
+    private Refs(
+        JPanel centerPanel,
+        ImagePanel homeImagePanel,
+        SixRowWordInput wordInput,
+        JLabel hintLabel) {
+      this.centerPanel = centerPanel;
+      this.homeImagePanel = homeImagePanel;
+      this.wordInput = wordInput;
+      this.hintLabel = hintLabel;
     }
+  }
 
-    public static Refs build() {
-        // Card-Container
-        JPanel centerPanel = new JPanel(new CardLayout());
+  public static Refs build() {
+    JPanel centerPanel = new JPanel(new CardLayout());
 
-        // ==== Bild-Card ====
-        JPanel imageCard = new JPanel(new BorderLayout());
-        BildPanel homeImage = new BildPanel(AppConfig.SCALE_FACTOR);
-        imageCard.add(homeImage.getComponent(), BorderLayout.CENTER);
+    // Build the card containing the home image.
+    JPanel imageCard = new JPanel(new BorderLayout());
+    ImagePanel homeImagePanel = new ImagePanel(AppConfig.SCALE_FACTOR);
+    imageCard.add(homeImagePanel.getComponent(), BorderLayout.CENTER);
 
-        // ==== Eingabe-Card ====
-        JPanel inputCard = new JPanel();
-        inputCard.setLayout(new BoxLayout(inputCard, BoxLayout.Y_AXIS));
+    // Build the card containing the game input controls.
+    JPanel inputCard = new JPanel();
+    inputCard.setLayout(new BoxLayout(inputCard, BoxLayout.Y_AXIS));
 
-        JLabel prompt = new JLabel("Gib ein Wort mit " + AppConfig.WORD_LENGTH + " Buchstaben ein:");
-        prompt.setAlignmentX(Component.CENTER_ALIGNMENT);
-        prompt.setBorder(new EmptyBorder(10, 10, 10, 10));
+    JLabel promptLabel =
+        new JLabel(
+            "Enter a word with " + AppConfig.WORD_LENGTH + " letters:");
+    promptLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+    promptLabel.setBorder(new EmptyBorder(10, 10, 10, 10));
 
-        JLabel hint = new JLabel(" ");
-        hint.setAlignmentX(Component.CENTER_ALIGNMENT);
-        hint.setBorder(new EmptyBorder(6, 10, 10, 10));
+    JLabel hintLabel = new JLabel(" ");
+    hintLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+    hintLabel.setBorder(new EmptyBorder(6, 10, 10, 10));
 
-        SixRowWordInput wordInput = new SixRowWordInput();
+    SixRowWordInput wordInput = new SixRowWordInput();
 
-        inputCard.add(Box.createVerticalGlue());
-        inputCard.add(prompt);
-        inputCard.add(wordInput);
-        inputCard.add(Box.createVerticalStrut(12));
+    inputCard.add(Box.createVerticalGlue());
+    inputCard.add(promptLabel);
+    inputCard.add(wordInput);
+    inputCard.add(Box.createVerticalStrut(12));
 
-        // On-Screen Tastatur (delegiert Eingaben)
-        OnScreenTastatur keyboard = new OnScreenTastatur() {
-            @Override public void onLetter(char c)  { wordInput.appendLetter(c); }
-            @Override public void onBackspace()     { wordInput.backspace(); }
-            @Override public void onEnter()         { wordInput.enter(); }
+    // Forward virtual keyboard actions to the word input component.
+    OnScreenKeyboard keyboard =
+        new OnScreenKeyboard() {
+          @Override
+          public void onLetter(char character) {
+            wordInput.appendLetter(character);
+          }
+
+          @Override
+          public void onBackspace() {
+            wordInput.backspace();
+          }
+
+          @Override
+          public void onEnter() {
+            wordInput.enter();
+          }
         };
-        inputCard.add(keyboard.getComponent());
 
-        // Hinweis unten (jetzt wirklich sichtbar)
-        inputCard.add(Box.createVerticalStrut(8));
-        inputCard.add(hint);
-        inputCard.add(Box.createVerticalGlue());
+    inputCard.add(keyboard.getComponent());
+    inputCard.add(Box.createVerticalStrut(8));
+    inputCard.add(hintLabel);
+    inputCard.add(Box.createVerticalGlue());
 
-        // Karten registrieren
-        centerPanel.add(imageCard, AppConfig.CARD_IMAGE);
-        centerPanel.add(inputCard, AppConfig.CARD_INPUT);
+    // Register both views in the shared card container.
+    centerPanel.add(imageCard, AppConfig.CARD_IMAGE);
+    centerPanel.add(inputCard, AppConfig.CARD_INPUT);
 
-        return new Refs(centerPanel, homeImage, wordInput, hint);
-    }
+    return new Refs(centerPanel, homeImagePanel, wordInput, hintLabel);
+  }
 }

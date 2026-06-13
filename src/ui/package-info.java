@@ -1,1 +1,2 @@
-package ui; /** Swing-UI-Komponenten (View-Schicht im MVP). */
+/** Contains the Swing user interface components for the MVP view layer. */
+package ui;

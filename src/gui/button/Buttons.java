@@ -1,12 +1,17 @@
 package gui.button;
 
-import javax.swing.*;
+import javax.swing.JComponent;
 
-/** Abstrakte Basis für Button-Gruppen. */
+/** Base class for button groups. */
 public abstract class Buttons {
-    public abstract void onPlay();
-    public abstract void onHome();
-    public abstract void onRestart();  // ← NEU
 
-    public JComponent getComponent() { return null; }
+  public abstract void onPlay();
+
+  public abstract void onHome();
+
+  public abstract void onRestart();
+
+  public JComponent getComponent() {
+    return null;
+  }
 }

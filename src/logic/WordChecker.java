@@ -1,56 +1,85 @@
 package logic;
 
-import java.nio.file.*;
-import java.util.*;
-import java.io.IOException;
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Locale;
+import java.util.Set;
 
+/** Loads and checks words from the application's word list. */
 public class WordChecker {
-    private static final Set<String> DICT = new HashSet<>();
 
-    static {
-        // Robustes Laden: 1) Classpath-Resource, 2) src/words.txt, 3) bin/words.txt
-        try {
-            java.io.InputStream in = WordChecker.class.getClassLoader().getResourceAsStream("words.txt");
-            java.util.List<String> lines = null;
-            if (in != null) {
-                lines = new java.util.ArrayList<>();
-                try (java.io.BufferedReader br = new java.io.BufferedReader(new java.io.InputStreamReader(in))) {
-                    String s;
-                    while ((s = br.readLine()) != null) { lines.add(s); }
-                }
-            }
-            if (lines == null) {
-                java.nio.file.Path p1 = java.nio.file.Paths.get("src/words.txt");
-                if (java.nio.file.Files.exists(p1)) {
-                    lines = java.nio.file.Files.readAllLines(p1);
-                }
-            }
-            if (lines == null) {
-                java.nio.file.Path p2 = java.nio.file.Paths.get("bin/words.txt");
-                if (java.nio.file.Files.exists(p2)) {
-                    lines = java.nio.file.Files.readAllLines(p2);
-                }
-            }
-            if (lines != null) {
-                for (String line : lines) {
-                    if (line != null && !line.isBlank()) {
-                        DICT.add(line.trim().toUpperCase(java.util.Locale.ROOT));
-                    }
-                }
-            } else {
-                System.err.println("words.txt nicht gefunden (classpath/src/bin). Wörterbuch bleibt leer.");
-            }
-        } catch (Exception e) {
-            System.err.println("Fehler beim Laden von words.txt: " + e.getMessage());
+  private static final Set<String> DICTIONARY = new HashSet<>();
+
+  static {
+    try {
+      List<String> lines = null;
+
+      // Load from the classpath before checking the source and binary directories.
+      InputStream inputStream =
+          WordChecker.class.getClassLoader().getResourceAsStream("words.txt");
+
+      if (inputStream != null) {
+        lines = new ArrayList<>();
+
+        try (BufferedReader reader =
+            new BufferedReader(new InputStreamReader(inputStream))) {
+          String line;
+
+          while ((line = reader.readLine()) != null) {
+            lines.add(line);
+          }
         }
+      }
+
+      if (lines == null) {
+        Path sourcePath = Paths.get("src/words.txt");
+
+        if (Files.exists(sourcePath)) {
+          lines = Files.readAllLines(sourcePath);
+        }
+      }
+
+      if (lines == null) {
+        Path binaryPath = Paths.get("bin/words.txt");
+
+        if (Files.exists(binaryPath)) {
+          lines = Files.readAllLines(binaryPath);
+        }
+      }
+
+      // Normalize valid entries before adding them to the dictionary.
+      if (lines != null) {
+        for (String line : lines) {
+          if (line != null && !line.isBlank()) {
+            DICTIONARY.add(line.trim().toUpperCase(Locale.ROOT));
+          }
+        }
+      } else {
+        System.err.println(
+            "words.txt was not found in the classpath, src, or bin directory.");
+      }
+    } catch (Exception exception) {
+      System.err.println(
+          "Failed to load words.txt: " + exception.getMessage());
+    }
+  }
+
+  public static boolean check(String input) {
+    if (input == null || input.isBlank()) {
+      return false;
     }
 
-    public static boolean check(String input) {
-        if (input == null || input.isBlank()) return false;
-        return DICT.contains(input.trim().toUpperCase());
-    }
+    return DICTIONARY.contains(input.trim().toUpperCase());
+  }
 
-    public static List<String> allWords() {
-        return new ArrayList<>(DICT);
-    }
+  public static List<String> allWords() {
+    return new ArrayList<>(DICTIONARY);
+  }
 }

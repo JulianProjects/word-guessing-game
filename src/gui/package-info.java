@@ -1,1 +1,2 @@
-package gui; /** Niedrigstufige GUI-Bausteine (Panels, Buttons, Tastatur). */
+/** Low-level GUI components such as panels, buttons, and keyboard handling. */
+package gui;
