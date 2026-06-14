@@ -2,8 +2,8 @@
 > Status: Finished
 
 > Authors:
->  Julian Wappler
->  Marek Scholze
+>  Julian Wappler, 
+>  Marek Scholze, 
 >  Lukas Rohne
 
 ## Game Overview
@@ -83,6 +83,8 @@ Check Java installation:
 
 ```cmd
 java -version
+```
+```cmd
 javac -version
 ```
 ### Windows PowerShell
